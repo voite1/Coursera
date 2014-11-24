@@ -1,0 +1,34 @@
+Codebook
+
+Variables
+===============
+ - features 		- contains table read created from tetures.txt file
+ - xTest 		- contains table read created from X_test.txt file
+ - yTest 		- contains table read created from y_test.txt file
+ - subjectTest 		- contains table read created from subject_test.txt file
+ - xTrain 		- contains table read created from X_train.txt file
+ - yTrain 		- contains table read created from y_train.txt file
+ - subjectTrain 	- contains table read created from subject_train.txt file
+ - MySet		- contains the table with combined files
+ - MyMean		- contains a vector of means extracted from MySet
+ - ind_set		- tidy data set containing means
+
+
+The code performs the following tasks (on Windows-based machines only)
+1. Sets up the working directory
+2. Loads the following libraries
+	library(data.table)
+	library(dplyr)
+	library(plyr)
+3. Downloads the zip file from the following uRL:
+	https://d396qusza40orc.cloudfront.net/getdata%2Fprojectfiles%2FUCI%20HAR%20Dataset.zip
+4. Unzips the file
+5. Reads unzipped files into separate variables
+6. Assignes column names to the actual data tables
+7. Merges the related files together
+8. Merges all the files into a single file
+9. creates a vector of means
+10. Assignes activity names
+11. Changes participant number to name
+12. Creats tidy data set
+

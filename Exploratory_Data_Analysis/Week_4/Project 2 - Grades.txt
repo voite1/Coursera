@@ -1,0 +1,485 @@
+## This first line will likely take a few seconds. Be patient!
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+#get the total number of PM25 for each year
+pm25 <- sum(NEI[NEI$year==1999,]$Emissions)
+pm25[2] <- sum(NEI[NEI$year==2002,]$Emissions)
+pm25[3] <- sum(NEI[NEI$year==2005,]$Emissions)
+pm25[4] <- sum(NEI[NEI$year==2008,]$Emissions)
+
+#draw the plot
+barplot(pm25, names.arg=c(1999, 2002, 2005, 2008), main="totalPM2.5 emission")
+abline(h=0)
+dev.copy(png, file="plot1.png")
+dev.off()
+
+===================================================================================
+
+## This first line will likely take a few seconds. Be patient!
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+#get the data from Baltimore for each year
+pm25Bal <- sum(NEI[NEI$year==1999 & NEI$fips=="24510",]$Emissions)
+pm25Bal[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510",]$Emissions)
+pm25Bal[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510",]$Emissions)
+pm25Bal[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510",]$Emissions)
+
+#draw the plot
+barplot(pm25Bal, names.arg=c(1999, 2002, 2005, 2008), main="totalPM2.5 emission in Baltimore")
+abline(h=0)
+dev.copy(png, file="plot2.png")
+dev.off()
+
+====================================================================================
+
+## This first line will likely take a few seconds. Be patient!
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+#get the data from Baltimore for each year
+pm25p <- sum(NEI[NEI$year==1999 & NEI$fips=="24510" & NEI$type=="POINT",]$Emissions)
+pm25p[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510" & NEI$type=="POINT",]$Emissions)
+pm25p[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510" & NEI$type=="POINT",]$Emissions)
+pm25p[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510" & NEI$type=="POINT",]$Emissions)
+
+pm25np <- sum(NEI[NEI$year==1999 & NEI$fips=="24510" & NEI$type=="NONPOINT",]$Emissions)
+pm25np[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510" & NEI$type=="NONPOINT",]$Emissions)
+pm25np[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510" & NEI$type=="NONPOINT",]$Emissions)
+pm25np[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510" & NEI$type=="NONPOINT",]$Emissions)
+
+pm25or <- sum(NEI[NEI$year==1999 & NEI$fips=="24510" & NEI$type=="ON-ROAD",]$Emissions)
+pm25or[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510" & NEI$type=="ON-ROAD",]$Emissions)
+pm25or[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510" & NEI$type=="ON-ROAD",]$Emissions)
+pm25or[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510" & NEI$type=="ON-ROAD",]$Emissions)
+
+pm25nr <- sum(NEI[NEI$year==1999 & NEI$fips=="24510" & NEI$type=="NON-ROAD",]$Emissions)
+pm25nr[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510" & NEI$type=="NON-ROAD",]$Emissions)
+pm25nr[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510" & NEI$type=="NON-ROAD",]$Emissions)
+pm25nr[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510" & NEI$type=="NON-ROAD",]$Emissions)
+
+#merge the total data into a frame
+total <- data.frame(pm25=c(pm25p, pm25np, pm25or, pm25nr), year=rep(c(1999, 2002, 2005, 2008)), type=rep(c("point", "nonpoint", "onroad", "nonroad"), each=4))
+
+#draw the data by type
+library(ggplot2)
+qplot(year, pm25, data=total, col=type)
+dev.copy(png, file="plot3.png")
+dev.off()
+
+=========================================================================================
+
+## This first line will likely take a few seconds. Be patient!
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+#get SCC containing "Coal"
+Coal <- as.character(SCC[grepl("Coal", SCC$Short.Name),]$SCC)
+pm25Coal <- sum(NEI[NEI$year==1999 & NEI$SCC%in%Coal,]$Emissions)
+pm25Coal[2] <- sum(NEI[NEI$year==2002 & NEI$SCC%in%Coal,]$Emissions)
+pm25Coal[3] <- sum(NEI[NEI$year==2005 & NEI$SCC%in%Coal,]$Emissions)
+pm25Coal[4] <- sum(NEI[NEI$year==2008 & NEI$SCC%in%Coal,]$Emissions)
+
+#draw the plot
+barplot(pm25Coal, names.arg=c(1999, 2002, 2005, 2008), main="totalPM2.5 emission related to Coal")
+abline(h=0)
+dev.copy(png, file="plot4.png")
+dev.off()
+
+==========================================================================================
+
+## This first line will likely take a few seconds. Be patient!
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+#get SCC containing "Veh"
+Veh <- as.character(SCC[grepl("Veh", SCC$Short.Name),]$SCC)
+pm25Veh <- sum(NEI[NEI$year==1999 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+pm25Veh[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+pm25Veh[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+pm25Veh[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+
+#draw the plot
+barplot(pm25Veh, names.arg=c(1999, 2002, 2005, 2008), main="totalPM2.5 emission related to motor in Baltimore")
+abline(h=0)
+dev.copy(png, file="plot5.png")
+dev.off()
+
+==========================================================================================
+
+## This first line will likely take a few seconds. Be patient!
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+#get SCC containing "Veh"
+Veh <- as.character(SCC[grepl("Veh", SCC$Short.Name),]$SCC)
+#get Baltimore data
+pm25B <- sum(NEI[NEI$year==1999 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+pm25B[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+pm25B[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+pm25B[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="24510" & NEI$SCC%in%Veh,]$Emissions)
+#get Los Angeles data
+pm25L <- sum(NEI[NEI$year==1999 & NEI$fips=="06037" & NEI$SCC%in%Veh,]$Emissions)
+pm25L[2] <- sum(NEI[NEI$year==2002 & NEI$fips=="06037" & NEI$SCC%in%Veh,]$Emissions)
+pm25L[3] <- sum(NEI[NEI$year==2005 & NEI$fips=="06037" & NEI$SCC%in%Veh,]$Emissions)
+pm25L[4] <- sum(NEI[NEI$year==2008 & NEI$fips=="06037" & NEI$SCC%in%Veh,]$Emissions)
+
+#merge the total data into a frame
+totalv <- data.frame(pm25=c(pm25B, pm25L), year=rep(c(1999, 2002, 2005, 2008)), city=rep(c("Baltimore", "Los Angeles"), each=4))
+
+#draw the data by type
+library(ggplot2)
+qplot(year, pm25, data=totalv, col=city)
+dev.copy(png, file="plot6.png")
+dev.off()
+
+============================================================================================
+
+# Loads RDS
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+
+# Samples data for testing
+NEIsample <- NEI[sample(nrow(NEI), size = 1000, replace = F), ]
+
+# Aggregates
+Emissions <- aggregate(NEI[, 'Emissions'], by = list(NEI$year), FUN = sum)
+Emissions$PM <- round(Emissions[, 2] / 1000, 2)
+
+png(filename = "plot1.png")
+barplot(Emissions$PM, names.arg = Emissions$Group.1, main = expression('Total Emission of PM'[2.5]), xlab = 'Year', ylab = expression(paste('PM', ''[2.5], ' in Kilotons')))
+dev.off()
+
+============================================================================================
+
+# Loads RDS
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+
+# Samples data for testing
+NEIsample <- NEI[sample(nrow(NEI), size = 5000, replace = F), ]
+
+# Subsets data and appends two years in one data frame
+MD <- subset(NEI, fips == '24510')
+
+png(filename = 'plot2.png')
+barplot(tapply(X = MD$Emissions, INDEX = MD$year, FUN = sum), main = 'Total Emission in Baltimore City, MD', xlab = 'Year', ylab = expression('PM'[2.5]))
+dev.off()
+
+============================================================================================
+
+# Loads RDS
+require(ggplot2)
+
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+
+# Samples data for testing
+NEIsample <- NEI[sample(nrow(NEI), size = 5000, replace = F), ]
+
+# Baltimore City, Maryland == fips
+MD <- subset(NEI, fips == 24510)
+MD$year <- factor(MD$year, levels = c('1999', '2002', '2005', '2008'))
+
+png('plot3.png', width = 800, height = 500, units = 'px')
+ggplot(data = MD, aes(x = year, y = log(Emissions))) + facet_grid(. ~ type) + guides(fill = F) + geom_boxplot(aes(fill = type)) + stat_boxplot(geom = 'errorbar') + ylab(expression(paste('Log', ' of PM'[2.5], ' Emissions'))) + xlab('Year') + ggtitle('Emissions per Type in Baltimore City, Maryland') + geom_jitter(alpha = 0.10)
+dev.off()
+
+============================================================================================
+
+# Loads RDS
+require(ggplot2)
+
+NEI <- readRDS("summarySCC_PM25.rds")
+SCC <- readRDS("Source_Classification_Code.rds")
+
+# Coal-related SCC
+SCC.coal = SCC[grepl("coal", SCC$Short.Name, ignore.case = TRUE), ]
+
+# Merges two data sets
+merge <- merge(x = NEI, y = SCC.coal, by = 'SCC')
+merge.sum <- aggregate(merge[, 'Emissions'], by = list(merge$year), sum)
+colnames(merge.sum) <- c('Year', 'Emissions')
+
+png(filename = 'plot4.png')
+ggplot(data = merge.sum, aes(x = Year, y = Emissions / 1000)) + geom_line(aes(group = 1, col = Emissions)) + geom_point(aes(size = 2, col = Emissions)) + ggtitle(expression('Total Emissions of PM'[2.5])) + ylab(expression(paste('PM', ''[2.5], ' in kilotons'))) + geom_text(aes(label = round(Emissions / 1000, digits = 2), size = 2, hjust = 1.5, vjust = 1.5)) + theme(legend.position = 'none') + scale_colour_gradient(low = 'black', high = 'red')
+dev.off()
+
+============================================================================================
+
+# Loads RDS
+library(ggplot2)
+
+NEI <- readRDS("summarySCC_PM25.rds")
+NEI$year <- factor(NEI$year, levels = c('1999', '2002', '2005', '2008'))
+SCC <- readRDS("Source_Classification_Code.rds")
+
+# Baltimore City, Maryland == fips
+MD.onroad <- subset(NEI, fips == 24510 & type == 'ON-ROAD')
+
+# Aggregates
+MD.df <- aggregate(MD.onroad[, 'Emissions'], by = list(MD.onroad$year), sum)
+colnames(MD.df) <- c('year', 'Emissions')
+
+png('plot5.png')
+ggplot(data = MD.df, aes(x = year, y = Emissions)) + geom_bar(aes(fill = year), stat = "identity") + guides(fill = F) + ggtitle('Total Emissions of Motor Vehicle Sources in Baltimore City, Maryland') + ylab(expression('PM'[2.5])) + xlab('Year') + theme(legend.position = 'none') + geom_text(aes(label = round(Emissions, 0), size = 1, hjust = 0.5, vjust = 2))
+dev.off()
+
+===========================================================================================
+
+# Loads RDS
+library(ggplot2)
+
+NEI <- readRDS("summarySCC_PM25.rds")
+NEI$year <- factor(NEI$year, levels = c('1999', '2002', '2005', '2008'))
+SCC <- readRDS("Source_Classification_Code.rds")
+
+# Baltimore City, Maryland
+# Los Angeles County, California
+MD.onroad <- subset(NEI, fips == '24510' & type == 'ON-ROAD')
+CA.onroad <- subset(NEI, fips == '06037' & type == 'ON-ROAD')
+
+# Aggregates
+MD.DF <- aggregate(MD.onroad[, 'Emissions'], by = list(MD.onroad$year), sum)
+colnames(MD.DF) <- c('year', 'Emissions')
+MD.DF$City <- paste(rep('MD', 4))
+
+CA.DF <- aggregate(CA.onroad[, 'Emissions'], by = list(CA.onroad$year), sum)
+colnames(CA.DF) <- c('year', 'Emissions')
+CA.DF$City <- paste(rep('CA', 4))
+
+DF <- as.data.frame(rbind(MD.DF, CA.DF))
+
+png('plot6.png')
+ggplot(data = DF, aes(x = year, y = Emissions)) + geom_bar(aes(fill = year),stat = "identity") + guides(fill = F) + ggtitle('Total Emissions of Motor Vehicle Sources\nLos Angeles County, California vs. Baltimore City, Maryland') + ylab(expression('PM'[2.5])) + xlab('Year') + theme(legend.position = 'none') + facet_grid(. ~ City) + geom_text(aes(label = round(Emissions, 0), size = 1, hjust = 0.5, vjust = -1))
+dev.off()
+
+===========================================================================================
+
+## Read data
+NEIdata = readRDS("summarySCC_PM25.rds")
+SCCdata = readRDS("Source_Classification_Code.rds")
+
+## Sort data
+plot1 = aggregate(NEIdata$Emissions,list(year=NEIdata$year),FUN=sum)
+
+## Plot1
+barplot((plot1$x)/10^6,
+  main="Total PM2.5 Emissions",
+  names.arg=plot1$year,
+  xlab="Year",
+  ylab="PM2.5 Emissions (10^6 Tons)"
+)
+
+## Save as png
+dev.copy(png, file="plot1.png", height=480, width=480)
+dev.off()
+
+===========================================================================================
+
+## Read data
+NEIdata = readRDS("summarySCC_PM25.rds")
+SCCdata = readRDS("Source_Classification_Code.rds")
+
+## Extract and sort Baltimore City data
+Baltimoredata = NEIdata[NEIdata$fips == "24510",]
+plot2 = aggregate(Baltimoredata$Emissions,list(year=Baltimoredata$year),FUN=sum)
+
+## Plot2
+barplot((plot2$x),
+    main="Total PM2.5 Emissions (Baltimore City)",
+    names.arg=plot2$year,
+    xlab="Year",
+    ylab="PM2.5 Emissions (Tons)"
+)
+
+## Save as png
+dev.copy(png, file="plot2.png", height=480, width=480)
+dev.off()
+
+==========================================================================================
+
+## Read data
+NEIdata = readRDS("summarySCC_PM25.rds")
+SCCdata = readRDS("Source_Classification_Code.rds")
+
+## Extract Baltimore City data
+Baltimoredata = NEIdata[NEIdata$fips == "24510",]
+
+## Run ggplot2
+library(ggplot2)
+
+## Plot3
+ggplot(Baltimoredata,aes(factor(year),Emissions,fill=type))+
+	geom_bar(stat="identity")+
+	theme_bw()+guides(fill=FALSE)+
+	facet_grid(.~type,scales="free",space="free")+
+	labs(x="Year",y="PM2.5 Emissions (tons)")+
+	labs(title="Total PM2.5 Emissions (Baltimore City), 1999-2008")
+
+## Save as png
+dev.copy(png, file="plot3.png", height=480, width=480)
+dev.off()
+
+==========================================================================================
+
+## Read data
+NEIdata = readRDS("summarySCC_PM25.rds")
+SCCdata = readRDS("Source_Classification_Code.rds")
+
+## Subset coal combustion data 
+## I identified relevant data from searching "coal" from 'EI.Sector' column in SCC dataset
+subsetdata = grepl("coal", SCCdata$EI.Sector,ignore.case=TRUE)
+subsetdata = SCCdata[subsetdata,]$SCC
+## Match to NEI dataset
+subsetdata = NEIdata[NEIdata$SCC %in% subsetdata,]
+
+## Run ggplot2
+library(ggplot2)
+
+## Plot4
+ggplot(subsetdata,aes(factor(year),Emissions/(10^5))) +
+  geom_bar(stat="identity",fill="grey",width=0.75) +
+  theme_bw() +  guides(fill=FALSE) +
+  labs(x="Year", y=expression("PM2.5 Emissions (10^5 Tons)")) + 
+  labs(title=expression("Total PM2.5 Coal Combustion Source Emissions, 1999-2008"))
+
+## Save as png
+dev.copy(png, file="plot4.png", height=480, width=480)
+dev.off()
+
+===========================================================================================
+
+## Read data
+NEIdata = readRDS("summarySCC_PM25.rds")
+SCCdata = readRDS("Source_Classification_Code.rds")
+
+## Extract and sort Baltimore City data
+Baltimoredata = NEIdata[NEIdata$fips == "24510",]
+
+## Subset motor vehicles data 
+## I identified relevant data from searching "vehicles" from 'EI.Sector' column in SCC dataset
+subsetdata = grepl("vehicle", SCCdata$EI.Sector,ignore.case=TRUE)
+subsetdata = SCCdata[subsetdata,]$SCC
+## Match to NEI-Baltimore dataset
+subsetdata = Baltimoredata[Baltimoredata$SCC %in% subsetdata,]
+
+## Run ggplot2
+library(ggplot2)
+
+## Plot5
+ggplot(subsetdata,aes(factor(year),Emissions)) +
+  geom_bar(stat="identity",fill="grey",width=0.75) +
+  theme_bw() +  guides(fill=FALSE) +
+  labs(x="Year", y=expression("PM2.5 Emissions (Tons)")) + 
+  labs(title=expression("Total PM2.5 Motor Vehicle Source Emissions (Baltimore), 1999-2008"))
+
+## Save as png
+dev.copy(png, file="plot5.png", height=480, width=480)
+dev.off()
+
+==========================================================================================
+
+## Read data
+NEIdata = readRDS("summarySCC_PM25.rds")
+SCCdata = readRDS("Source_Classification_Code.rds")
+
+## Subset motor vehicles data 
+## I identified relevant data from searching "vehicles" from 'EI.Sector' column in SCC dataset
+subsetdata = grepl("vehicle", SCCdata$EI.Sector,ignore.case=TRUE)
+subsetdata = SCCdata[subsetdata,]$SCC
+subsetdata = NEIdata[NEIdata$SCC %in% subsetdata,]
+
+## Extract and sort Baltimore City data
+vehiclesBaltimore = subsetdata[subsetdata$fips == "24510",]
+vehiclesBaltimore$city = "Baltimore City"
+
+## Extract and sort Los Angeles County data
+vehiclesLA = subsetdata[subsetdata$fips == "06037",]
+vehiclesLA$city = "Los Angeles County"
+
+## Combine both datasets
+plot6 = rbind(vehiclesBaltimore, vehiclesLA)
+
+## Run ggplot2
+library(ggplot2)
+
+## Plot6
+ggplot(plot6, aes(x=factor(year), y=Emissions, fill=city)) +
+  geom_bar(aes(fill=year),stat="identity") +
+  facet_grid(scales="free", space="free", .~city) +
+  guides(fill=FALSE) + theme_bw() +
+  labs(x="Year", y=expression("PM2.5 Emissions (Tons)")) + 
+  labs(title=expression("Total PM2.5 Motor Vehicle Source Emissions (Baltimore & LA), 1999-2008"))
+
+## Save as png
+dev.copy(png, file="plot6.png", height=480, width=560)
+dev.off()
+
+==========================================================================================
+
+NEI <- readRDS("F:/Downloads/exdata-data-NEI_data/summarySCC_PM25.rds")
+SCC <- readRDS("F:/Downloads/exdata-data-NEI_data/Source_Classification_Code.rds")
+NEI$year <- as.factor(NEI$year)
+
+#plot1
+em.sum <- aggregate(Emissions~year, data=NEI, sum)
+png("plot1.png")
+barplot(height = em.sum$Emissions, 
+        names.arg = em.sum$year,
+        ylab = "Emissions/t",
+        xlab = "year",
+        main = "Total PM2.5 emission for year 1999, 2002, 2005, and 2008")
+dev.off()
+
+=============================================================================================
+
+NEI <- readRDS("F:/Downloads/exdata-data-NEI_data/summarySCC_PM25.rds")
+SCC <- readRDS("F:/Downloads/exdata-data-NEI_data/Source_Classification_Code.rds")
+NEI$year <- as.factor(NEI$year)
+
+#plot2
+baltimore.sum <- aggregate(Emissions~year, data=NEI[NEI$fips == '24510',], sum)
+png("plot2.png")
+barplot(height = baltimore.sum$Emissions, 
+        names.arg = baltimore.sum$year,
+        ylab = "Emissions/t",
+        xlab = "year",
+        main = "Total PM2.5 emission of Baltimore from 1999 to 2008")
+dev.off()
+
+==============================================================================================
+
+NEI <- readRDS("F:/Downloads/exdata-data-NEI_data/summarySCC_PM25.rds")
+SCC <- readRDS("F:/Downloads/exdata-data-NEI_data/Source_Classification_Code.rds")
+NEI$year <- as.factor(NEI$year)
+
+#plot3
+baltimore <- NEI[NEI$fips == '24510',]
+baltimore.type.sum <- aggregate(x = baltimore$Emissions, 
+                                by=list(year=baltimore$year, type=baltimore$type),
+                                sum)
+require(ggplot2)
+png("plot3.png")
+ggplot(baltimore.type.sum, aes(x=year, y=x, colour=type)) +
+  geom_line(aes(group=type), size=1) + 
+  geom_point(aes(colour=type), size=5) +
+  ggtitle("Different Types of PM2.5 Emissions from 1999~2008 of Baltimore")+
+  xlab("Emissions")
+dev.off()
+
+===============================================================================================
+
+NEI <- readRDS("F:/Downloads/exdata-data-NEI_data/summarySCC_PM25.rds")
+SCC <- readRDS("F:/Downloads/exdata-data-NEI_data/Source_Classification_Code.rds")
+NEI$year <- as.factor(NEI$year)
+
+#plot5
+SCC.vehicle <- SCC[ SCC$Data.Category == "Onroad", "SCC"]
+baltimore.vehicle <- NEI[(NEI$SCC %in% SCC.vehicle) & (NEI$fips == '24510'), ]
+baltimore.vehicle.sum <- aggregate(Emissions ~ year, baltimore.vehicle, sum)
+png("plot5.png")
+ggplot(baltimore.vehicle.sum, aes(x=year, y=Emissions)) + 
+  geom_line(aes(group=1), size=1, colour="blue") +
+  geom_point(size=5, colour="red") + 
+  ggtitle("PM2.5 Emissions of Motor Vehicles in Baltimore during 1999~2008")
+dev.off()
+
+===============================================================================================
+
+
